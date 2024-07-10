@@ -1,9 +1,9 @@
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import './App.css';
 import LoginPage from './LoginPage';
-import OldDashboard from './OldDashboard';
 import { UserProvider } from './UserContext';
 import Dashboard from './Dashboard';
+import TicketDetails from './TicketDetails';
 
 function App() {
     return (
@@ -11,7 +11,7 @@ function App() {
             <UserProvider> 
               <Routes>
                 <Route path='/login' element={<LoginPage/>}/>
-                <Route path='/Old' element={<OldDashboard/>}/>
+                <Route path='/ticket/:id' element={<TicketDetails/>}/>
                 <Route path='/' element={<Dashboard/>}/>
               </Routes>
             </UserProvider>

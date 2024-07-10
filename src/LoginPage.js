@@ -18,7 +18,7 @@ const LoginPage = () => {
         return;
     }
 
-    login({username: username});
+    login({username: username, type: "admin"});
     // Example validation (replace with your backend interaction)
     // if (username !== 'user' || password !== 'password') {
     //   setErrorMessage('Invalid username or password');
