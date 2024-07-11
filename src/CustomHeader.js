@@ -2,6 +2,7 @@ import React, {useContext} from 'react';
 import { Layout, Row, Col, Button } from 'antd'; // Import Ant Design components for header
 import {useNavigate, Link} from 'react-router-dom';
 import {UserContext} from "./UserContext";
+import {LoginOutlined, LogoutOutlined} from '@ant-design/icons';
 
 const CustomHeader = () => {
     const {user, logout} = useContext(UserContext);
@@ -19,9 +20,9 @@ const CustomHeader = () => {
                     </Col>
                     <Col>
                     {user ?
-                        <Button type="primary" onClick={logout}>Log out</Button>
+                        <Button type="default" style={{color: '#356c91', fontWeight: 'bold'}} icon={<LogoutOutlined/>} onClick={logout}>Log out</Button>
                     : 
-                        <Button type="primary" onClick={() => navigate('/login')}>Log in</Button>
+                        <Button type="default" style={{color: '#356c91', fontWeight: 'bold'}} icon={<LoginOutlined/>} onClick={() => navigate('/login')}>Log in</Button>
                     }
                     </Col> 
                 </Row>

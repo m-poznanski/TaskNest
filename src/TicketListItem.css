@@ -1,0 +1,16 @@
+.ticket-title-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.ticket-title {
+    font-weight: bold;
+    color: #356c91;
+}
+
+.ticket-description {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
