@@ -1,26 +1,81 @@
-import React, {useState, useEffect, useContext} from 'react';
-import {Layout, Row, Col, Card, Typography, List, Skeleton, Spin, Button, Form, Input} from 'antd';
+import React, {useState, useEffect, useContext, Children} from 'react';
+import {Layout, Row, Col, Card, Typography, List, Skeleton, Spin, Button, Form, Input, Timeline, Select} from 'antd';
 import {EditOutlined, DeleteOutlined, CheckOutlined, CloseOutlined} from '@ant-design/icons';
 import {useParams, useNavigate} from 'react-router-dom';
 import {UserContext} from "./UserContext";
 import CustomHeader from './CustomHeader';
 import Paragraph from 'antd/es/typography/Paragraph';
+import axios from 'axios';
+import { ApiURL } from './ApiConfig';
 
 const TicketDetails = ({}) => {
   const [ticketData, setTicketData] = useState(null);
   const [tempData, setTempData] = useState(null);
+  const [ticketChanges, setTicketChanges] = useState([]);
   const [editMode, setEditMode] = useState(false);
+  const [users, setUsers] = useState([]);
   const {user} = useContext(UserContext);
   const {id} = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch ticket details from API based on `ticketId`
-    //fetchTicketDetails(ticketId).then((data) => setTicketDetails(data));
-    setTicketData({id: id});
+    // Fetch ticket details from API
+    fetchTicketData(id).then((data) => setTicketData(data));
+    fetchTicketChanges(id).then((data) => setTicketChanges(data));
   }, [id]);
 
+  const fetchTicketData = async () => {
+    try {
+      const url = ApiURL + 'tickets/' + id;
+      const response = await axios.get(url);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching ticket data:', error);
+    //   throw error;
+    }
+  };
+
+  const fetchTicketChanges = async () => {
+    try {
+      const url = ApiURL + 'changes/' + id;
+      const response = await axios.get(url);
+      const tempChanges = [];
+      response.data.forEach(element => {
+        tempChanges.push({
+            children:
+            <div hoverable style={{ width: '100%'}}>
+                <b>Date of change:</b> {element.date} <br />
+                <b>Previous name:</b> {element.prevName} <br />
+                <b>Previous status:</b> {element.prevStatus} <br />
+                <b>Previous assigned user:</b> {element.prevUser} <br />
+                <b>Previous description:</b> {element.prevDescription}
+            </div>
+        })
+      })
+      return tempChanges;
+    } catch (error) {
+      console.error('Error fetching ticket changes:', error);
+    //   throw error;
+    }
+  };
+
+  const fetchUsers = async () => {
+    try {
+      const url = ApiURL + 'users';
+      const response = await axios.get(url);
+      const tempUsers = [];
+      response.data.forEach(element => {
+        tempUsers.push({value: element.id, label: element.name})
+      });
+      return tempUsers;
+    } catch (error) {
+      console.error('Error fetching users:', error);
+      // throw error;
+    }
+  };
+
   const handleEditClick = () => {
+    fetchUsers().then((data) => setUsers(data));
     setTempData(ticketData);
     setEditMode(true);
   };
@@ -43,6 +98,10 @@ const TicketDetails = ({}) => {
 
   const handleChange = (event) => {
     setTicketData({ ...ticketData, [event.target.name]: event.target.value });
+  };
+
+  const handleUserChange = (event) => {
+    setTicketData({ ...ticketData, user: event });
   };
 
   return (
@@ -90,7 +149,14 @@ const TicketDetails = ({}) => {
                             </Col>
                             <Col span={8}>
                                 <Form.Item label="Assigned User:" style={{fontWeight: "600"}}>
-                                    <Input name="user" value={ticketData.user} onChange={handleChange}/>
+                                    {/* <Input name="user" value={ticketData.user} onChange={handleChange}/> */}
+                                    <Select 
+                                        value={ticketData.user}
+                                        defaultValue={user.id}
+                                        onChange={handleUserChange} 
+                                        options={users}
+                                        placeholder="Select user"
+                                    />
                                 </Form.Item>
                             </Col>
                         </Row>
@@ -127,28 +193,29 @@ const TicketDetails = ({}) => {
                         </Paragraph>
                         </>
                     }
-                    {(user?.type === 'admin' || user?.id === ticketData.user) && (
-                        <Row style={{marginTop: '20px', display: 'flex', justifyContent: 'flex-end' }}>
-                            {editMode ? (
-                                <>
-                                    <Button type="primary" icon={<CloseOutlined/>} style={{marginLeft: 16, color:"white", backgroundColor: "red"}} onClick={handleCancelEditClick}>
-                                    Cancel Edit
-                                    </Button>
-                                    <Button type="default" icon={<CheckOutlined/>} style={{marginLeft: 16, color:"white", backgroundColor: "#2aa31f"}} onClick={handleConfirmEditClick}>
-                                    Confirm Edit
-                                    </Button>
-                                </>
-                            ) : (
+                    <Row style={{marginTop: '20px', display: 'flex', justifyContent: 'flex-end' }}>
+                        {editMode ? (
+                            <>
+                                <Button type="primary" icon={<CloseOutlined/>} style={{marginLeft: 16, color:"white", backgroundColor: "red"}} onClick={handleCancelEditClick}>
+                                Cancel Edit
+                                </Button>
+                                <Button type="default" icon={<CheckOutlined/>} style={{marginLeft: 16, color:"white", backgroundColor: "#2aa31f"}} onClick={handleConfirmEditClick}>
+                                Confirm Edit
+                                </Button>
+                            </>
+                        ) : (
+                            user &&
                                 <Button type="primary" icon={<EditOutlined />} onClick={handleEditClick}>
                                 Edit Ticket
                                 </Button>
-                            )}
-                        </Row>
-                    )}
-                    <Row style={{marginTop: '20px'}}>
+                        )}
+                    </Row>
+                    <Row style={{marginTop: '20px', marginBottom: '20px'}}>
                         <Typography.Text strong>Changes:</Typography.Text>
                     </Row>
-                    {"List of Changes"}  
+                    <Timeline
+                        items={ticketChanges}
+                    />
                 </Col>
                 }     
             </Card>

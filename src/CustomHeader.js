@@ -12,7 +12,9 @@ const CustomHeader = () => {
         <Layout.Header style={{ backgroundColor: '#fff', padding: '0 20px' }}>
             <Row gutter={16} justify="space-between">
                 <Col>
-                    <h1 style={{color: '#356c91', margin: 0}}>Task Nest</h1> {/* Replace with your logo if needed */}
+                    <Link to={'/'}>
+                        <h1 style={{color: '#356c91', margin: 0}} >Task Nest</h1>
+                    </Link>
                 </Col>
                 <Row gutter={16}>
                     <Col style={{fontWeight: 'bold', color: '#356c91'}}>

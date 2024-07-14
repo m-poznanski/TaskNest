@@ -4,6 +4,7 @@ import LoginPage from './LoginPage';
 import { UserProvider } from './UserContext';
 import Dashboard from './Dashboard';
 import TicketDetails from './TicketDetails';
+import TicketAdd from './TicketAdd';
 
 function App() {
     return (
@@ -13,6 +14,7 @@ function App() {
                 <Route path='/login' element={<LoginPage/>}/>
                 <Route path='/ticket/:id' element={<TicketDetails/>}/>
                 <Route path='/' element={<Dashboard/>}/>
+                <Route path='/add' element={<TicketAdd/>}/>
               </Routes>
             </UserProvider>
         </BrowserRouter>

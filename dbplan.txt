@@ -1,0 +1,25 @@
+
+users:
+	id: Int PRIMARY KEY AUTOINCREMENT NOT NULL
+	name: String
+	password: String
+	isAdmin: bool
+
+tickets:
+	id: Int PRIMARY KEY AUTOINCREMENT NOT NULL
+	name: String
+	status: String
+	user: Int
+	description: String
+	FOREIGN KEY (user) REFERENCES user (id)
+
+changes:
+	id: Int PRIMARY KEY AUTOINCREMENT NOT NULL
+	ticketId: Int
+	date: Date
+	prevName: String
+	prevStatus: String
+	prevDescription: String
+	prevUser: Int
+	FOREIGN KEY (prevUser) REFERENCES users (id)
+	FOREIGN KEY (ticketId) REFERENCES tickets (id)

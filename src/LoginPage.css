@@ -48,6 +48,15 @@
     text-align: center;
 }
 
+.guest-text {
+    color: #356c91;
+}
+
+.guest-text:hover {
+    color: #356c91;
+    font-weight: bold;
+}
+
 .error-message {
     color: red;
     font-weight: bold;

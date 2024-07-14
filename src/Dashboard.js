@@ -5,6 +5,8 @@ import {FilterOutlined, ScheduleOutlined, TeamOutlined} from '@ant-design/icons'
 import {UserContext} from "./UserContext";
 import CustomHeader from './CustomHeader';
 import TicketListItem from './TicketListItem';
+import axios from 'axios';
+import { ApiURL } from './ApiConfig';
 import './Dashboard.css';
 // import { Table, Input, Select, Button } from 'antd';
 
@@ -29,21 +31,46 @@ const sampleUsers = [
 
 const Dashboard = () => {
   const [ticketsPerRow, setTicketsPerRow] = useState(3);
-  const [tickets, setTickets] = useState(sampleTickets); // State for ticket data
+  const [tickets, setTickets] = useState([]); // State for ticket data
   const [filterUsers, setFilterUsers] = useState([]); // State for filter
-  const [users, setUsers] = useState(sampleUsers);
+  const [users, setUsers] = useState([]);
   const [filterStatuses, setFilterStatuses] = useState([]);
   const [search, setSearch] = useState('');
   const [sortBy, setSortBy] = useState(null); // State for sort order
   const {user, logout} = useContext(UserContext);
   const navigate = useNavigate();
 
+  // Fetch tickets and users data from API
   useEffect(() => {
-    // Fetch tickets and users data from API
-    //fetchTickets().then((data) => setTickets(data));
-
-    // userow trzeba bedzie sparsować na format: value, label
+    fetchTickets().then((data) => setTickets(data));
+    fetchUsers().then((data) => setUsers(data));
   }, []);
+
+  const fetchTickets = async () => {
+    try {
+      const url = ApiURL + 'tickets';
+      const response = await axios.get(url);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching tickets:', error);
+      // throw error;
+    }
+  };
+
+  const fetchUsers = async () => {
+    try {
+      const url = ApiURL + 'users';
+      const response = await axios.get(url);
+      const tempUsers = [];
+      response.data.forEach(element => {
+        tempUsers.push({value: element.id, label: element.name})
+      });
+      return tempUsers;
+    } catch (error) {
+      console.error('Error fetching users:', error);
+      // throw error;
+    }
+  };
 
   const handleTicketsPerRowChange = () => {
     setTicketsPerRow((ticketsPerRow) % 3 + 1);
@@ -121,9 +148,16 @@ const Dashboard = () => {
                   style={{width: "40%", marginLeft: 10}}
                 />
               </Row>
-              {/* <Button type="primary" block style={{ marginTop: '1rem' }}>
-                Apply Filters
-              </Button> */}
+              {user &&
+                <Button
+                  type="default" 
+                  block 
+                  style={{marginTop: '1rem', backgroundColor: '#356c91', color: 'white', fontWeight: '600'}}
+                  onClick={() => navigate('/add')}
+                >
+                  Add ticket
+                </Button>
+              }
             </div>
           </Col>
           <Col span={16}>
