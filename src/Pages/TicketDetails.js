@@ -1,14 +1,14 @@
-import React, {useState, useEffect, useContext, Children} from 'react';
-import {Layout, Row, Col, Card, Typography, List, Skeleton, Spin, Button, Form, Input, Timeline, Select} from 'antd';
+import React, {useState, useEffect, useContext} from 'react';
+import {Layout, Row, Col, Card, Typography, Skeleton, Spin, Button, Form, Input, Timeline, Select} from 'antd';
 import {EditOutlined, DeleteOutlined, CheckOutlined, CloseOutlined} from '@ant-design/icons';
-import {useParams, useNavigate} from 'react-router-dom';
-import {UserContext} from "./UserContext";
-import CustomHeader from './CustomHeader';
+import {useParams, useNavigate, Link} from 'react-router-dom';
+import {UserContext} from "../Contexts/UserContext";
+import CustomHeader from '../Components/CustomHeader';
 import Paragraph from 'antd/es/typography/Paragraph';
 import axios from 'axios';
-import { ApiURL } from './ApiConfig';
+import { ApiURL } from '../ApiConfig';
 
-const TicketDetails = ({}) => {
+const TicketDetails = () => {
   const [ticketData, setTicketData] = useState(null);
   const [tempData, setTempData] = useState(null);
   const [ticketChanges, setTicketChanges] = useState([]);
@@ -18,8 +18,8 @@ const TicketDetails = ({}) => {
   const {id} = useParams();
   const navigate = useNavigate();
 
+    // Fetching ticket details from API
   useEffect(() => {
-    // Fetch ticket details from API
     fetchTicketData(id).then((data) => setTicketData(data));
     fetchTicketChanges(id).then((data) => setTicketChanges(data));
   }, [id]);
@@ -104,6 +104,10 @@ const TicketDetails = ({}) => {
     setTicketData({ ...ticketData, user: event });
   };
 
+  const handleStatusChange = (event) => {
+    setTicketData({ ...ticketData, status: event });
+  };
+
   return (
     <Layout style={{ padding: '20px' }}>
         <CustomHeader/>
@@ -112,13 +116,17 @@ const TicketDetails = ({}) => {
             <Card
                 title={
                     <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-                        <p>Ticket id:{ticketData?.id}</p>
+                        <p>Ticket details
+                            {/* {ticketData?.id} */}
+                        </p>
                         {editMode ?
                             <Button type="default" style={{color: 'red', fontWeight: 'bold'}} icon={<DeleteOutlined />} onClick={handleDeleteClick}>
                                 Delete Ticket
                             </Button>
                         :
-                            <></>
+                            <Link to={'/'} style={{color: '#356c91'}}>
+                                <u>Return to list</u>
+                            </Link>
                         }
                     </div>
                 }
@@ -144,12 +152,17 @@ const TicketDetails = ({}) => {
                             </Col>
                             <Col span={8}>
                                 <Form.Item label="Status:" style={{fontWeight: "600"}}>
-                                    <Input name="status" value={ticketData.status} onChange={handleChange}/>
+                                    {/* <Input name="status" value={ticketData.status} onChange={handleChange}/> */}
+                                    <Select 
+                                        value={ticketData.status}
+                                        onChange={handleStatusChange} 
+                                        options={[{value: 'new', label: "New"}, {value: 'finished', label: "Finished"}, {value: 'in_progress', label: "In Progress"}]}
+                                        placeholder="Select new status"
+                                    />
                                 </Form.Item>
                             </Col>
                             <Col span={8}>
                                 <Form.Item label="Assigned User:" style={{fontWeight: "600"}}>
-                                    {/* <Input name="user" value={ticketData.user} onChange={handleChange}/> */}
                                     <Select 
                                         value={ticketData.user}
                                         defaultValue={user.id}

@@ -1,8 +1,8 @@
 import React, {useContext} from 'react';
 import {Card, List} from 'antd';
-import {Link, useNavigation} from 'react-router-dom';
-import {UserContext} from "./UserContext";
-import './TicketListItem.css';
+import {Link} from 'react-router-dom';
+import {UserContext} from "../Contexts/UserContext";
+import '../Styles/TicketListItem.css';
 
 
 const TicketListItem = ({ticket}) => {
@@ -23,6 +23,7 @@ const TicketListItem = ({ticket}) => {
       statusColor = "goldenrod";
       status = "In Progress";
       break;
+    default:
   }
 
   return (
@@ -32,7 +33,7 @@ const TicketListItem = ({ticket}) => {
               hoverable 
               style={{
                 width: '100%',
-                borderColor: user?.id == ticket.user ? "#356c91" : "lightgray",
+                borderColor: user?.id === ticket.user ? "#356c91" : "lightgray",
                 borderBottomWidth: 2,
                 borderRightWidth: 2
               }}

@@ -1,0 +1,11 @@
+.dashboard-layout {
+    padding: 20px;
+    min-height: 100vh;
+    background-color: #f0f0f0;
+}
+
+.ticket-list {
+    background-color: #fff;
+    padding: 1rem;
+    height: '100%';
+}

@@ -1,7 +1,7 @@
 import React, {useContext, useState, useEffect} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
-import {UserContext} from './UserContext';
-import './LoginPage.css';
+import {UserContext} from '../Contexts/UserContext';
+import '../Styles/LoginPage.css';
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
@@ -18,12 +18,8 @@ const LoginPage = () => {
         return;
     }
 
+    // call to api
     login({username: username, type: "admin"});
-    // Example validation (replace with your backend interaction)
-    // if (username !== 'user' || password !== 'password') {
-    //   setErrorMessage('Invalid username or password');
-    //   return;
-    // }
   };
 
   useEffect(() => {

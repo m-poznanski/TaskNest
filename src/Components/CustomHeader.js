@@ -1,7 +1,7 @@
 import React, {useContext} from 'react';
-import { Layout, Row, Col, Button } from 'antd'; // Import Ant Design components for header
+import { Layout, Row, Col, Button } from 'antd';
 import {useNavigate, Link} from 'react-router-dom';
-import {UserContext} from "./UserContext";
+import {UserContext} from "../Contexts/UserContext";
 import {LoginOutlined, LogoutOutlined} from '@ant-design/icons';
 
 const CustomHeader = () => {

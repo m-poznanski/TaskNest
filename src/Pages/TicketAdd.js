@@ -1,14 +1,13 @@
-import React, {useState, useEffect, useContext, Children} from 'react';
-import {Layout, Row, Col, Card, Typography, List, Skeleton, Spin, Button, Form, Input, Select, Timeline} from 'antd';
-import {EditOutlined, DeleteOutlined, CheckOutlined, CloseOutlined} from '@ant-design/icons';
-import {useParams, useNavigate} from 'react-router-dom';
-import {UserContext} from "./UserContext";
-import CustomHeader from './CustomHeader';
-import Paragraph from 'antd/es/typography/Paragraph';
+import React, {useState, useEffect, useContext} from 'react';
+import {Layout, Row, Col, Card, Button, Form, Input, Select} from 'antd';
+import {CheckOutlined, CloseOutlined} from '@ant-design/icons';
+import {useNavigate} from 'react-router-dom';
+import {UserContext} from "../Contexts/UserContext";
+import CustomHeader from '../Components/CustomHeader';
 import axios from 'axios';
-import { ApiURL } from './ApiConfig';
+import { ApiURL } from '../ApiConfig';
 
-const TicketAdd = ({}) => {
+const TicketAdd = () => {
   const [ticketData, setTicketData] = useState({id: '', name: "", status: "new", user: '', description: ""});
   const [users, setUsers] = useState([]);
   const {user} = useContext(UserContext);
@@ -78,8 +77,8 @@ const TicketAdd = ({}) => {
                             </Col>
                             <Col span={8}>
                                 <Form.Item label="Assigned User:" style={{fontWeight: "600"}}>
-                                    {/* <Input name="user" value={ticketData.user} onChange={handleChange}/> */}
                                     <Select 
+                                      name="user"
                                         value={ticketData.user}
                                         defaultValue={user.id}
                                         onChange={handleUserChange} 

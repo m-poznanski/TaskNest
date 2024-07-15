@@ -1,0 +1,12 @@
+.filter-container {
+    background-color: #fff;
+    padding: 1rem;
+    margin-bottom: 20px;
+}
+
+.add-button {
+    margin-top: 1rem;
+    background-color: #356c91;
+    color: white;
+    font-weight: 600;
+}

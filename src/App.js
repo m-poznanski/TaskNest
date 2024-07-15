@@ -1,10 +1,10 @@
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
-import './App.css';
-import LoginPage from './LoginPage';
-import { UserProvider } from './UserContext';
-import Dashboard from './Dashboard';
-import TicketDetails from './TicketDetails';
-import TicketAdd from './TicketAdd';
+import './Styles/App.css';
+import LoginPage from './Pages/LoginPage';
+import { UserProvider } from './Contexts/UserContext';
+import Dashboard from './Pages/Dashboard';
+import TicketDetails from './Pages/TicketDetails';
+import TicketAdd from './Pages/TicketAdd';
 
 function App() {
     return (
@@ -20,22 +20,5 @@ function App() {
         </BrowserRouter>
     );
 }
-
-{/* <div className="App">
-<header className="App-header">
-  <img src={logo} className="App-logo" alt="logo" />
-  <p>
-    Edit <code>src/App.js</code> and save to reload.
-  </p>
-  <a
-    className="App-link"
-    href="https://reactjs.org"
-    target="_blank"
-    rel="noopener noreferrer"
-  >
-    Learn React
-  </a>
-</header>
-</div> */}
 
 export default App;
