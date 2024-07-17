@@ -8,10 +8,12 @@ const UserProvider = ({ children }) => {
     const [user, setUser] = useLocalStorage("user", null);
     const navigate = useNavigate();
 
-  // ... functions to update user state based on login/logout
+    //functions to update user state based on login/logout
     const login = async (data) => {
-        setUser(data);
-        navigate("/");
+        if (data){ 
+            setUser(data);
+            navigate("/");
+        }
     };
 
     // call this function to sign out logged in user

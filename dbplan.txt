@@ -1,25 +1,28 @@
 
-users:
-	id: Int PRIMARY KEY AUTOINCREMENT NOT NULL
-	name: String
-	password: String
-	isAdmin: bool
+CREATE TABLE users (
+	id Int PRIMARY KEY AUTOINCREMENT NOT NULL
+	name String NOT NULL
+	password String NOT NULL
+	isAdmin bool NOT NULL
+);
 
-tickets:
-	id: Int PRIMARY KEY AUTOINCREMENT NOT NULL
-	name: String
-	status: String
-	user: Int
-	description: String
-	FOREIGN KEY (user) REFERENCES user (id)
+CREATE TABLE tickets (
+	id Int PRIMARY KEY AUTOINCREMENT NOT NULL
+	name String NOT NULL
+	status String NOT NULL --"new" or "finished" or "in_progress"
+	user Int
+	description String
+	FOREIGN KEY (user) REFERENCES users (id)
+);
 
-changes:
-	id: Int PRIMARY KEY AUTOINCREMENT NOT NULL
-	ticketId: Int
-	date: Date
-	prevName: String
-	prevStatus: String
-	prevDescription: String
-	prevUser: Int
+CREATE TABLE changes (
+	id Int PRIMARY KEY AUTOINCREMENT NOT NULL
+	ticketId Int NOT NULL
+	date Date NOT NULL
+	prevName String NOT NULL
+	prevStatus String NOT NULL
+	prevDescription String NOT NULL
+	prevUser Int NOT NULL
 	FOREIGN KEY (prevUser) REFERENCES users (id)
 	FOREIGN KEY (ticketId) REFERENCES tickets (id)
+);

@@ -18,7 +18,7 @@ const CustomHeader = () => {
                 </Col>
                 <Row gutter={16}>
                     <Col style={{fontWeight: 'bold', color: '#356c91'}}>
-                    {user ? "Hello, " + user.username + "!" : "You're browsing as guest!"}
+                    {user ? "Hello, " + user.name + "!" : "You're browsing as guest!"}
                     </Col>
                     <Col>
                     {user ?

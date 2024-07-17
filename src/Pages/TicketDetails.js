@@ -41,13 +41,14 @@ const TicketDetails = () => {
       const response = await axios.get(url);
       const tempChanges = [];
       response.data.forEach(element => {
+        let tempDate = new Date(element.date);
         tempChanges.push({
             children:
             <div hoverable style={{ width: '100%'}}>
-                <b>Date of change:</b> {element.date} <br />
+                <b>Date of change:</b> {tempDate.toLocaleString()} <br />
                 <b>Previous name:</b> {element.prevName} <br />
                 <b>Previous status:</b> {element.prevStatus} <br />
-                <b>Previous assigned user:</b> {element.prevUser} <br />
+                <b>Previous assigned user:</b> {element.prevUserName} <br />
                 <b>Previous description:</b> {element.prevDescription}
             </div>
         })
@@ -74,6 +75,33 @@ const TicketDetails = () => {
     }
   };
 
+  const deleteTicket = async () => {
+    try {
+      const url = ApiURL + 'ticket/';
+      const response = await axios.delete(url + ticketData.id);
+      navigate('/');
+      return response.data;
+    } catch (error) {
+      console.error('Error deleting ticket:', error);
+      alert("Error deleting ticket!");
+      // throw error;
+    }
+  };
+
+  const updateTicket = async () => {
+    try {
+      const url = ApiURL + 'ticket/';
+      const response = await axios.put(url + ticketData.id, ticketData);
+      //navigate('/');
+      fetchTicketChanges(id).then((data) => setTicketChanges(data));
+      return response.data;
+    } catch (error) {
+      console.error('Error updating ticket:', error);
+      alert("Error updating ticket!");
+      //throw error;
+    }
+  };
+
   const handleEditClick = () => {
     fetchUsers().then((data) => setUsers(data));
     setTempData(ticketData);
@@ -86,14 +114,13 @@ const TicketDetails = () => {
   };
 
   const handleConfirmEditClick = () => {
-    //put ticketData to api
     setEditMode(false);
+    updateTicket().then((data) => console.log("Updated ticket: ", data));
   };
 
   const handleDeleteClick = () => {
-    //delete to api
     setEditMode(false);
-    navigate("/");
+    deleteTicket().then((data) => console.log("Deleted ticket: ", data));
   };
 
   const handleChange = (event) => {
@@ -141,6 +168,7 @@ const TicketDetails = () => {
                     </>
                 :
                 <Col>
+                    {/* Editing form */}
                     {editMode ?
                         <>
                         <Form size='small'>
@@ -182,6 +210,7 @@ const TicketDetails = () => {
                         </Row>
                         </Form>
                         </>
+                        // Standard details display
                     :
                         <>
                         <Row gutter={16}  style={{marginTop: '20px'}}>
@@ -195,7 +224,7 @@ const TicketDetails = () => {
                             </Col>
                             <Col span={8}>
                                 <Typography.Text strong>Assigned User: </Typography.Text>
-                                {ticketData.user}
+                                {ticketData.userName}
                             </Col>
                         </Row>
                         <Row style={{marginTop: '20px'}}>
@@ -226,9 +255,14 @@ const TicketDetails = () => {
                     <Row style={{marginTop: '20px', marginBottom: '20px'}}>
                         <Typography.Text strong>Changes:</Typography.Text>
                     </Row>
-                    <Timeline
-                        items={ticketChanges}
-                    />
+                    {ticketChanges.length ?
+                      <Timeline
+                          items={ticketChanges}
+                          reverse={true}
+                      />
+                      :
+                      <p>No changes history</p>
+                    }
                 </Col>
                 }     
             </Card>

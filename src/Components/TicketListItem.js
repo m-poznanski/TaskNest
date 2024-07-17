@@ -47,7 +47,7 @@ const TicketListItem = ({ticket}) => {
                 }
                 description={
                     <>
-                    <b>Assigned User: </b> {ticket.user} <br />
+                    <b>Assigned User: </b> {ticket.userName} <br />
                     <p className='ticket-description'><b>Description: </b>{ticket.description}</p>
                     </>
                 }

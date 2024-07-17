@@ -2,6 +2,8 @@ import React, {useContext, useState, useEffect} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import {UserContext} from '../Contexts/UserContext';
 import '../Styles/LoginPage.css';
+import axios from 'axios';
+import { ApiURL } from '../ApiConfig';
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
@@ -9,24 +11,39 @@ const LoginPage = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
   const {user, login} = useContext(UserContext);
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-
-    if(!username || !password){
-        setErrorMessage('Invalid username or password');
-        return;
-    }
-
-    // call to api
-    login({username: username, type: "admin"});
-  };
-
+  
   useEffect(() => {
     if(user){
         navigate('/');
     }
   }, [user])
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    if(!username || !password){
+        setErrorMessage('Username and password required!');
+        return;
+    }
+
+    logInCall().then((data) => login(data));
+    // login({username: username, type: "admin"});
+  };
+
+  const logInCall = async () => {
+    try {
+        const url = ApiURL + 'login';
+        const response = await axios.post(url, {Name: username, Password: password, Id: 0, isAdmin: false});
+        console.log(response.data);
+        // login(response.data);
+        return response.data;
+      } catch (error) {
+        console.error('Error logging in:', error);
+        setErrorMessage('Invalid username or password');
+        //throw error;
+      }
+  };
+
 
   return (
     <div className="login-container">

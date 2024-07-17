@@ -8,7 +8,7 @@ import axios from 'axios';
 import { ApiURL } from '../ApiConfig';
 
 const TicketAdd = () => {
-  const [ticketData, setTicketData] = useState({id: '', name: "", status: "new", user: '', description: ""});
+  const [ticketData, setTicketData] = useState({id: 0, name: "", status: "new", user: '', description: ""});
   const [users, setUsers] = useState([]);
   const {user} = useContext(UserContext);
   const navigate = useNavigate();
@@ -32,13 +32,26 @@ const TicketAdd = () => {
     }
   };
 
+  const postTicket = async () => {
+    try {
+      const url = ApiURL + 'ticket';
+      const response = await axios.post(url, ticketData);
+      navigate('/');
+      return response.data;
+    } catch (error) {
+      console.error('Error creating ticket:', error);
+      alert("Error creating ticket!");
+      //throw error;
+    }
+  };
+
   const handleCancelClick = () => {
     setTicketData(null);
     navigate('/');
   };
 
   const handleConfirmClick = () => {
-    //post ticketData to api
+    postTicket().then((data) => console.log("Posted new ticket: ", data));
   };
 
   const handleChange = (event) => {
