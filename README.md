@@ -10,8 +10,8 @@ This React application is a basic ticket management system. It allows users to:
 ## Setup
 1. Clone this repository.
 2. Install dependencies using `npm install` or `yarn install`.
-3. Create a .env file at the root of your project and add your API URL as follows:  
-    `API_URL=https://your-api-url`
+3. Add your API URL to ApiConfig.js file as follows:
+    `export const ApiURL = "your-api-address/";`
 4. Start the development server using `npm start` or `yarn start`.
 
 ## API
